@@ -10,17 +10,21 @@
 
 import UIKit
 
-let kSpreadDuration = 0.4
-let kColumnHasIndicator = true         // 默认有指示线条
-let kColumnIndictorH:CGFloat = 2        // 指示线条高度
-let kColumnViewH:CGFloat = 48.0
-
-let kColumnIndicatorColor = UIColor.color3CA5FF()
-let kColumnTitleMargin:CGFloat = 44          // title按钮之间默认没有间距，这个值保证两个按钮的间距
-let kColumnIndictorMinW : CGFloat = 60       // 指示条默认最小宽度
+let spreadDuration = 0.4
+// 默认有指示线条
+let columnIsHasIndicator = true
+// 指示线条高度
+let columnIndictorHeight: CGFloat = 2.0
+let columnViewHeight: CGFloat = 48.0
+// title按钮之间默认没有间距，这个值保证两个按钮的间距
+let columnTitleMargin:CGFloat = 44
+// 指示条默认最小宽度
+let columnIndictorMinWidth : CGFloat = 60
 // title普通状态字体
 let columnTitleNormalFont:CGFloat = (AYinches.inches47 || AYinches.inches55) ? 15 : 14
 
+// 指示器颜色
+let columnIndicatorColor = UIColor.color3CA5FF()
 // title普通状态颜色
 let columnTitleNormalColor   = UIColor.color666666()
 // title选中状态颜色
@@ -70,7 +74,7 @@ class AYColumnScrollView: UIScrollView {
             item.setTitleColor(columnTitleSelectedColor, for: UIControl.State.selected)
             item.setBackgroundImage(UIImage.image(UIColor.colore3edff()), for: .selected)
             item.titleLabel?.font = UIFont.systemFont(ofSize: columnTitleNormalFont)
-            item.frame.size = CGSize(width: (item.frame.width + kColumnTitleMargin) > kColumnIndictorMinW ? item.frame.width + kColumnTitleMargin : kColumnIndictorMinW, height: kColumnHasIndicator ? kColumnViewH - kColumnIndictorH : kColumnViewH)     // 增加按钮宽度，达到间隙效果
+            item.frame.size = CGSize(width: (item.frame.width + columnTitleMargin) > columnIndictorMinWidth ? item.frame.width + columnTitleMargin : columnIndictorMinWidth, height: columnIsHasIndicator ? columnViewHeight - columnIndictorHeight : columnViewHeight)     // 增加按钮宽度，达到间隙效果
             item.frame = CGRect(x: itemW, y: 0, width: item.frame.width, height: item.frame.height)
             itemW += item.frame.width
             item.tag = i
@@ -88,12 +92,12 @@ class AYColumnScrollView: UIScrollView {
         if hasInit { return }
         self.showsHorizontalScrollIndicator = false
         self.showsVerticalScrollIndicator = false
-        guard kColumnHasIndicator else {
+        guard columnIsHasIndicator else {
             return
         }
-        let indicator = UIView(frame: CGRect(x:0, y: kColumnViewH - kColumnIndictorH, width: kScreenWidth/CGFloat(items.count), height: kColumnIndictorH))      // 默认取第一个按钮的宽度
+        let indicator = UIView(frame: CGRect(x:0, y: columnViewHeight - columnIndictorHeight, width: kScreenWidth/CGFloat(items.count), height: columnIndictorHeight))      // 默认取第一个按钮的宽度
         self.indicator = indicator
-        indicator.backgroundColor = kColumnIndicatorColor
+        indicator.backgroundColor = columnIndicatorColor
         insertSubview(indicator, at: 0)
         addSubview(indicator)
         hasInit = true
@@ -122,14 +126,14 @@ class AYColumnScrollView: UIScrollView {
 
         // 改变指示器的frame
         UIView.animate(withDuration: 0.3) {
-            self.indicator.frame = CGRect(x: positionX, y: kColumnViewH - kColumnIndictorH, width: btnWidth, height: kColumnIndictorH)
+            self.indicator.frame = CGRect(x: positionX, y: columnViewHeight - columnIndictorHeight, width: btnWidth, height: columnIndictorHeight)
         }
     }
 
 
     /// 改变scrollview的contentOffset
    private func autoSuitItemsPosition() {
-        UIView.animate(withDuration: kSpreadDuration) {
+        UIView.animate(withDuration: spreadDuration) {
             if self.contentSize.width > self.frame.size.width {
                 var desiredX = self.selectedButton.center.x - self.bounds.width/2
                 if desiredX < 0 {
